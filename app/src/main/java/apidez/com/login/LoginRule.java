@@ -6,5 +6,5 @@ package apidez.com.login;
 public interface LoginRule {
     boolean isLogin();
 
-    void setLogin(boolean login);
+    void setLogin(boolean isLogin);
 }

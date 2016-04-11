@@ -10,7 +10,7 @@ public class LoginRuleImpl implements LoginRule {
         return isLogin;
     }
 
-    public void setLogin(boolean login) {
-        isLogin = login;
+    public void setLogin(boolean isLogin) {
+        this.isLogin = isLogin;
     }
 }
