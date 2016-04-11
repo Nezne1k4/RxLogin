@@ -10,20 +10,21 @@ import rx.functions.Action1;
 /**
  * Created by nongdenchet on 4/11/16.
  */
-public class AuthenticationHelper {
+public class AuthenticateHelper {
     private static final int LOGIN_REQUEST = 1000;
     private AuthenticateService authenticateService;
 
-    public AuthenticationHelper(AuthenticateService authenticateService) {
+    public AuthenticateHelper(AuthenticateService authenticateService) {
         this.authenticateService = authenticateService;
     }
 
-    public void bindLogin(final AppCompatActivity appCompatActivity) {
+    public void bindLogin(final AppCompatActivity appCompatActivity,
+                          final String message, final Class<?> loginActivityClass) {
         authenticateService.loginEvent()
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        showLoginActivity(appCompatActivity);
+                        showLoginActivity(appCompatActivity, message, loginActivityClass);
                     }
                 });
     }
@@ -34,9 +35,9 @@ public class AuthenticationHelper {
         }
     }
 
-    private void showLoginActivity(AppCompatActivity activity) {
-        Toast.makeText(activity, "Login required!!!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(activity, LoginActivity.class);
+    private void showLoginActivity(AppCompatActivity activity, String message, Class<?> loginActivityClass) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(activity, loginActivityClass);
         activity.startActivityForResult(intent, LOGIN_REQUEST);
     }
 }

@@ -10,7 +10,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
-    private AuthenticationHelper authenticatehelper;
+    private AuthenticateHelper authenticatehelper;
     private MyViewModel myViewModel = new MyViewModel();
 
     @Override
@@ -22,8 +22,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void bindViewModel() {
-        authenticatehelper = new AuthenticationHelper(myViewModel.authenticateService);
-        authenticatehelper.bindLogin(this);
+        authenticatehelper = new AuthenticateHelper(myViewModel.authenticateService);
+        authenticatehelper.bindLogin(this, "Anh Giang đăng nhập dùm", LoginActivity.class);
     }
 
     private void setUpView() {

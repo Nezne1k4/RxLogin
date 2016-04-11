@@ -8,9 +8,13 @@ import rx.subjects.PublishSubject;
  * Created by nongdenchet on 4/11/16.
  */
 public class AuthenticateService {
-    private SessionService mSessionService = new SessionService();
     private PublishSubject<Boolean> mLoginEvent = PublishSubject.create();
     private PublishSubject<Boolean> mLoginEventResult = PublishSubject.create();
+    private LoginRule mLoginRule;
+
+    public AuthenticateService(LoginRule loginRule) {
+        this.mLoginRule = loginRule;
+    }
 
     public void setLoginResult(boolean result) {
         mLoginEventResult.onNext(result);
@@ -24,7 +28,7 @@ public class AuthenticateService {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(final Observable<T> observable) {
-                if (!mSessionService.isLogin()) {
+                if (!mLoginRule.isLogin()) {
                     mLoginEvent.onNext(true);
                     return waitForLogin(observable);
                 }
@@ -39,7 +43,7 @@ public class AuthenticateService {
                 .flatMap(new Func1<Boolean, Observable<T>>() {
                     @Override
                     public Observable<T> call(Boolean success) {
-                        mSessionService.setLogin(success);
+                        mLoginRule.setLogin(success);
                         return success ? observable : Observable.<T>empty();
                     }
                 });
