@@ -1,21 +1,29 @@
 package apidez.com.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
+    private AuthenticationHelper authenticatehelper;
+    private MyViewModel myViewModel = new MyViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpView();
+        bindViewModel();
+    }
+
+    private void bindViewModel() {
+        authenticatehelper = new AuthenticationHelper(myViewModel.authenticateService);
+        authenticatehelper.bindLogin(this);
     }
 
     private void setUpView() {
@@ -28,9 +36,13 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        authenticatehelper.onActivityResult(requestCode, resultCode);
+    }
+
     private void subscribeTask() {
-        Observable.just("Hello World")
-                .compose(this.<String>checkLogin())
+        myViewModel.sample()
                 .takeUntil(destroyEvent())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
